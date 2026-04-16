@@ -11,5 +11,6 @@ export class CreateContactDto {
   email: string;
 
   @IsOptional()
-  groupId?: number;
+  @IsString()
+  group?: string;
 }

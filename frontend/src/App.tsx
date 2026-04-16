@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Contacts from "./pages/Contacts";
 import CreateContact from "./pages/CreateContact";
 import Navbar from "./components/Navbar";
+import "./App.css";
 
 function App() {
   return (

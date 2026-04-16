@@ -5,45 +5,71 @@ export default function CreateContact() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+	const [group, setGroup] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!name || !email || !phone) {
-      alert("заповни всі поля");
+      setError("Заповни всі поля");
       return;
     }
 
-    await createContact({ name, email, phone });
+    try {
+      setLoading(true);
+      setError("");
 
-    alert("Створено");
-	
-    setName("");
-    setEmail("");
-    setPhone("");
+      await createContact({ name, email, phone, group });
+
+      setName("");
+      setEmail("");
+      setPhone("");
+
+      alert("Створено");
+    } catch (e) {
+      setError("Помилка при створені контакта");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+    <div style={{ padding: "20px" }}>
+      <h1>Create Contact</h1>
 
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <input
-        placeholder="Phone"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-      />
+      <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
 
-      <button type="submit">Create</button>
-    </form>
+        <input
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+		
+		<input
+		placeholder="Group"
+		value={group}
+		onChange={(e) => setGroup(e.target.value)}
+		/>
+
+        <input
+          placeholder="Phone"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Create"}
+        </button>
+      </form>
+    </div>
   );
 }
